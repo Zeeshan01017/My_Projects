@@ -1,0 +1,11 @@
+# Email/SMS Spam Classifier
+
+This is a placeholder ready-to-deploy structure for Streamlit.
+
+## Structure
+- sms_spam_classification/app.py
+- sms_spam_classification/model.pkl
+- sms_spam_classification/vectorizer.pkl
+- sms_spam_classification/train_model.py
+- requirements.txt
+- README.md
