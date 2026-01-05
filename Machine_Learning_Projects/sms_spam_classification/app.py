@@ -21,8 +21,8 @@ def transform_text(text):
     return " ".join(text)
 
 # Load model and vectorizer (dummy placeholders)
-tfidf = pickle.load(open('vectorizer.pkl','rb'))
-model = pickle.load(open('model.pkl','rb'))
+tfidf = pickle.load(open('Machine_Learning_Projects/sms_spam_classification/vectorizer.pkl','rb'))
+model = pickle.load(open('Machine_Learning_Projects/sms_spam_classification/model.pkl','rb'))
 
 st.title("Email/SMS Spam Classifier")
 input_sms = st.text_input("Enter the message")
