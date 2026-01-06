@@ -3,3 +3,5 @@ nltk
 scikit-learn
 pandas
 numpy
+tensorflow
+pillow
