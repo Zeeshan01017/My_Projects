@@ -1,36 +1,65 @@
 import streamlit as st
 import pickle
+import string
 import nltk
-
-nltk.download('punkt')
-nltk.download('punkt_tab')
-nltk.download('stopwords')
-
 from nltk.corpus import stopwords
 from nltk.stem.porter import PorterStemmer
-import string
+
+# Download required NLTK data (runs once)
+nltk.download('punkt')
+nltk.download('stopwords')
 
 ps = PorterStemmer()
 
 def transform_text(text):
     text = text.lower()
     text = nltk.word_tokenize(text)
-    text = [i for i in text if i.isalnum()]
-    text = [i for i in text if i not in stopwords.words('english')]
-    text = [ps.stem(i) for i in text]
-    return " ".join(text)
 
-# Load model and vectorizer (dummy placeholders)
-tfidf = pickle.load(open('Machine_Learning_Projects/sms_spam_classification/vectorizer.pkl','rb'))
-model = pickle.load(open('Machine_Learning_Projects/sms_spam_classification/model.pkl','rb'))
+    y = []
+    for i in text:
+        if i.isalnum():
+            y.append(i)
 
-st.title("Email/SMS Spam Classifier")
-input_sms = st.text_input("Enter the message")
-if input_sms:
-    transformed_sms = transform_text(input_sms)
-    vector_input = tfidf.transform([transformed_sms])
-    result = model.predict(vector_input)[0]
-    if result == 1:
-        st.header("Spam")
+    text = y[:]
+    y.clear()
+
+    for i in text:
+        if i not in stopwords.words('english'):
+            y.append(i)
+
+    text = y[:]
+    y.clear()
+
+    for i in text:
+        y.append(ps.stem(i))
+
+    return " ".join(y)
+
+
+# Load trained model & vectorizer
+tfidf = pickle.load(open('vectorizer.pkl', 'rb'))
+model = pickle.load(open('model.pkl', 'rb'))
+
+st.title("📧 Email / SMS Spam Classifier")
+
+input_sms = st.text_area("Enter the message")
+
+if st.button("Predict"):
+    if input_sms.strip() == "":
+        st.warning("Please enter a message")
     else:
-        st.header("Not Spam")
+        # Preprocess
+        transformed_sms = transform_text(input_sms)
+
+        # Vectorize
+        vector_input = tfidf.transform([transformed_sms])
+
+        # Predict
+        result = model.predict(vector_input)[0]
+
+        # Display result (CORRECT LABELS)
+        if result == 1:
+            st.error("🚨 Spam Message")
+        else:
+            st.success("✅ Not Spam (Ham)")
+
