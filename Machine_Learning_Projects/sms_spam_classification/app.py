@@ -1,3 +1,4 @@
+import os
 import streamlit as st
 import pickle
 import string
@@ -37,8 +38,10 @@ def transform_text(text):
 
 
 # Load trained model & vectorizer
-tfidf = pickle.load(open('vectorizer.pkl', 'rb'))
-model = pickle.load(open('model.pkl', 'rb'))
+BASE_DIR = os.path.dirname(__file__)
+
+tfidf = pickle.load(open(os.path.join(BASE_DIR, "vectorizer.pkl"), "rb"))
+model = pickle.load(open(os.path.join(BASE_DIR, "model.pkl"), "rb"))
 
 st.title("📧 Email / SMS Spam Classifier")
 
